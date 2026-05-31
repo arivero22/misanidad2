@@ -4,14 +4,18 @@
  */
 package misanidad2;
 
+import java.util.*;
+
 /**
  *
  * @author alvar
  */
 public class Paciente extends Usuario {
     private String cipa, telefono, direccion;
-    /*private TarjetaSanitaria tarjeta_sanitaria;
-    private HistorialClinico historial;*/
+    private List<Medicamento> medicamentos;
+    private List<Vacuna> vacunas;
+    private List<Consulta> historial_clinico;
+    private List<PruebaLaboratorio> pruebas;
     
     
     public Paciente(String nombre, String dni, String cipa, String telefono, String direccion){
@@ -19,13 +23,29 @@ public class Paciente extends Usuario {
         this.cipa = cipa;
         this.telefono = telefono;
         this.direccion = direccion;
-        /*tarjeta_sanitaria = new TarjetaSanitaria();
-        historial = new HistorialClinico();*/
+        this.medicamentos = new ArrayList<>();
+        this.vacunas = new ArrayList<>();
+        this.historial_clinico = new ArrayList<>();
+        this.pruebas = new ArrayList<>();
     }
     
     public String getCipa(){ return cipa; }
     public String getTelefono(){ return telefono; }
     public String getDireccion(){ return direccion; }
+    public List<Medicamento> getMedicamentos(){ return medicamentos; }
+    public List<Vacuna> getVacunas(){ return vacunas; }
+    public List<Consulta> getHistorialClinico(){ return historial_clinico; }
+    public List<PruebaLaboratorio> getPruebas(){ return pruebas; }
     
     public void setTelefono(String telefono){ this.telefono = telefono; }
+    
+    public void agregarMedicamento(Medicamento medicamento){ medicamentos.add(medicamento); }
+    public void borrarMedicamento(Medicamento medicamento){ medicamentos.remove(medicamento); }
+    
+    public void agregarVacuna(Vacuna vacuna){ vacunas.add(vacuna); }
+    public void borrarVacuna(Vacuna vacuna){ vacunas.remove(vacuna); }
+    
+    public void agregarConsulta(Consulta consulta){ historial_clinico.add(consulta); }
+    
+    public void agregarPrueba(PruebaLaboratorio prueba){ pruebas.add(prueba); }
 }

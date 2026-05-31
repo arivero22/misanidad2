@@ -28,6 +28,19 @@ public abstract class Usuario implements Serializable {
     public String getNombre(){ return nombre; }
     public boolean isActivo(){ return activo; }
     
+    public boolean isMedico(){
+        if(tipo == TipoUsuario.MEDICO){
+            return true;
+        } else{
+            return false;
+        }
+    }
+    
+    @Override
+    public String toString(){
+        return nombre;
+    }
+    
     @Override
     public boolean equals(Object obj){
         if(obj == this) return true;

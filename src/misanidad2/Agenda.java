@@ -5,6 +5,7 @@
 package misanidad2;
 
 import java.io.Serializable;
+import static java.lang.Math.abs;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -92,5 +93,63 @@ public class Agenda implements Serializable {
         }
         
         return disponibles;
+    }
+    
+    public int reagendarDia(LocalDate fecha){
+        List<Cita> citas_dia = getCitasDelDia(fecha);
+        int contador =0;
+        
+        if(citas_dia.isEmpty()) return 0;
+        
+        citas_dia.sort((c1, c2) -> c1.getFechaHora().compareTo(c2.getFechaHora()));
+        
+        for(int i= 1; i<=30; i++){
+            LocalDate fecha_nueva = fecha.plusDays(i);
+            List<LocalDateTime> horarios_libres = getHorariosDisponibles(fecha_nueva);
+            
+            if(horarios_libres.size() >= citas_dia.size()){
+                LocalTime hora_primera_cita = citas_dia.get(0).getFechaHora().toLocalTime();
+                int indice_inicio = 0;
+                int menor_diff = Integer.MAX_VALUE;
+                
+                for(int j = 0; j < horarios_libres.size(); j++){
+                    int diff = Math.abs(horarios_libres.get(j).toLocalTime().getHour() - hora_primera_cita.getHour());
+                    if(diff < menor_diff){
+                        menor_diff = diff;
+                        indice_inicio = j;
+                    }
+                }
+                
+                for(int j = 0; j < citas_dia.size() && (indice_inicio+j) < horarios_libres.size(); j++){
+                    Cita c = citas_dia.get(j);
+                    LocalDateTime nueva_fecha_hora = horarios_libres.get(indice_inicio+j);
+
+                    c.setEstado(EstadoCita.CANCELADA);
+                    c.setMotivoCancelacion("Reagendada por el personal");
+                    c.setFechaCancelacion(LocalDateTime.now());
+
+                    Cita nueva = new Cita(c.getPaciente(), c.getMedico(), nueva_fecha_hora,c.getMotivo() + " (Reagendada)", c.getCentro());
+                    nueva.setTelefonica(c.isTelefonica());
+                    nueva.setEstado(EstadoCita.CONFIRMADA);
+
+                    sistema.registrarCita(nueva);
+                    contador++;
+                }
+                break;
+            }
+        }
+        return contador;
+    }
+    
+    private LocalDateTime buscarProxFechaDisp(LocalDate fecha_original){
+        for(int i=1; i<=30; i++){
+            LocalDate fecha_busq = fecha_original.plusDays(i);
+            List<LocalDateTime> horarios = getHorariosDisponibles(fecha_busq);
+            
+            if(!horarios.isEmpty()){
+                return horarios.get(0);
+            }
+        }
+        return null;
     }
 }

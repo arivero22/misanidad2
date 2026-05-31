@@ -57,7 +57,8 @@ public class VistaInicioSesion extends javax.swing.JFrame {
                 System.out.println("Loggeado como paciente");
                 break;
             case TipoUsuario.MEDICO:
-                //abrirVentanaSanitario((Medico) usuario);
+                this.dispose();
+                new VistaMedico(sistema, (Medico) usuario).setVisible(true);
                 System.out.println("Loggeado como medico");
                 break;
             case TipoUsuario.PERSONAL_ADMINISTRACION:
@@ -65,7 +66,8 @@ public class VistaInicioSesion extends javax.swing.JFrame {
                 System.out.println("Loggeado como pers admin");
                 break;
             case TipoUsuario.ADMINISTRADOR:
-                //abrirVentanaAdministracion((Administrador) usuario);
+                this.dispose();
+                new VistaAdministrador(sistema).setVisible(true);
                 System.out.println("Loggeado como admin");
                 break;
             default:
