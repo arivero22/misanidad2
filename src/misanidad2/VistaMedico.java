@@ -4,14 +4,23 @@
  */
 package misanidad2;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Image;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
@@ -37,9 +46,43 @@ public class VistaMedico extends javax.swing.JFrame {
         cargarSelectorPacientes(medico);
     }
     
+    private void mostrarImagenPrueba(PruebaImagen prueba){
+        if(prueba == null || !prueba.tieneImagen()){
+            JOptionPane.showMessageDialog(this, "Esta prueba no tiene imagen", "Sin imagen", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JFrame ventanaImagen = new JFrame(prueba.getNombre());
+        ventanaImagen.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ventanaImagen.setSize(800, 600);
+        ventanaImagen.setLocationRelativeTo(this);
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        ImageIcon icono = null;
+
+        if(prueba.getImagenBytes() != null){
+            icono = new ImageIcon(prueba.getImagenBytes());
+        } else if(prueba.getRutaImagen() != null){
+            icono = new ImageIcon(prueba.getRutaImagen());
+        }
+        
+        Image imagenEscalada = icono.getImage().getScaledInstance(750, 500, Image.SCALE_SMOOTH);
+        JLabel labelImagen = new JLabel(new ImageIcon(imagenEscalada));
+        labelImagen.setHorizontalAlignment(JLabel.CENTER);
+
+        JScrollPane scrollImagen = new JScrollPane(labelImagen);
+        panel.add(scrollImagen, BorderLayout.CENTER);            
+        
+
+        ventanaImagen.add(panel);
+        ventanaImagen.setVisible(true);
+    }
+
+    
     private void cargarSelectorPacientes(Medico medico){
         List<Paciente> pacientes = sistema.getPacientesParaMedico(medico);
-        for (Paciente p : pacientes) {
+        for(Paciente p : pacientes) {
             SeleccionPaciente.addItem(p);
         }
     }
@@ -60,15 +103,15 @@ public class VistaMedico extends javax.swing.JFrame {
     private Cita getCitaSeleccionada(){
         int filaSeleccionada = TablaCitas.getSelectedRow();
 
-        if (filaSeleccionada == -1){
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona una cita", "Error", JOptionPane.WARNING_MESSAGE);
+        if(filaSeleccionada == -1){
+            JOptionPane.showMessageDialog(this, "Selecciona una cita", "Error", JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
         int fila_modelo = TablaCitas.convertRowIndexToModel(filaSeleccionada);
         List<Cita> citas_medico = sistema.getCitasParaMedico(medico);
 
-        if (filaSeleccionada >= citas_medico.size()){
+        if(filaSeleccionada >= citas_medico.size()){
             return null;
         }
 
@@ -85,7 +128,7 @@ public class VistaMedico extends javax.swing.JFrame {
             }
         };
         
-        for (Medicamento m : p.getMedicamentos()){
+        for(Medicamento m : p.getMedicamentos()){
             Object[] fila = {
                 m.getNombre(),
                 m.getDosis() + "/" + m.getFrecuencia(),
@@ -109,7 +152,7 @@ public class VistaMedico extends javax.swing.JFrame {
             }
         };
         
-        for (Vacuna v : p.getVacunas()){
+        for(Vacuna v : p.getVacunas()){
             Object[] fila = {
                 v.getNombre(),
                 v.getDosis(),
@@ -133,7 +176,7 @@ public class VistaMedico extends javax.swing.JFrame {
             }
         };
         
-        for (Consulta c : p.getHistorialClinico()){
+        for(Consulta c : p.getHistorialClinico()){
             Object[] fila = {
                 c.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")),
                 c.getMotivo(),
@@ -157,7 +200,7 @@ public class VistaMedico extends javax.swing.JFrame {
             }
         };
         
-        for (PruebaLaboratorio prue : p.getPruebas()){
+        for(PruebaLaboratorio prue : p.getPruebas()){
             Object[] fila = {
                 prue.getFecha(),
                 prue.getNombre(),
@@ -181,7 +224,7 @@ public class VistaMedico extends javax.swing.JFrame {
             }
         };
         
-        for (Cita c : sistema.getCitasParaMedico(m)){
+        for(Cita c : sistema.getCitasParaMedico(m)){
             Object[] fila = {
                 c.getPaciente().getNombre(),
                 c.getMotivo(),
@@ -226,14 +269,14 @@ public class VistaMedico extends javax.swing.JFrame {
         int filaSeleccionada = TablaConsultas1.getSelectedRow();
         Paciente paciente = (Paciente) SeleccionPaciente.getSelectedItem();
 
-        if (filaSeleccionada == -1){
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona una consulta", "Error", JOptionPane.WARNING_MESSAGE);
+        if(filaSeleccionada == -1){
+            JOptionPane.showMessageDialog(this, "Selecciona una consulta", "Error", JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
         List<Consulta> consultas_paciente = paciente.getHistorialClinico();
 
-        if (filaSeleccionada >= consultas_paciente.size()) {
+        if(filaSeleccionada >= consultas_paciente.size()){
             return null;
         }
 
@@ -264,6 +307,9 @@ public class VistaMedico extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         TablaPruebas = new javax.swing.JTable();
+        jButton2 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaVacunas = new javax.swing.JTable();
@@ -446,20 +492,53 @@ public class VistaMedico extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(TablaPruebas);
 
+        jButton2.setText("Añadir prueba de laboratorio");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("Ver imagen");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Añadir prueba de imagen");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton5)))
                 .addContainerGap())
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
                 .addContainerGap())
         );
 
@@ -575,7 +654,7 @@ public class VistaMedico extends javax.swing.JFrame {
         if(paciente == null) return;
 
         String nombre = JOptionPane.showInputDialog(this, "Nombre del medicamento:", "Crear receta", JOptionPane.QUESTION_MESSAGE);
-        if(nombre == null){
+        if(nombre == null) {
             return;
         }
 
@@ -588,7 +667,7 @@ public class VistaMedico extends javax.swing.JFrame {
 
         if(opcion == JOptionPane.YES_OPTION){
             nuevo = new Medicamento(nombre, dosis, frecuencia);
-        } else{
+        }else {
             String fecha_str = JOptionPane.showInputDialog(this, "Fecha de fin del tratamiento (dd/mm/yyyy):", "Crear receta", JOptionPane.QUESTION_MESSAGE);
             if(fecha_str == null) return;
             LocalDate fecha_fin;
@@ -627,11 +706,20 @@ public class VistaMedico extends javax.swing.JFrame {
     private void BotonPrescripcionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonPrescripcionActionPerformed
         Cita cita = getCitaSeleccionada();
         if(cita != null){
-            String prescripcion = JOptionPane.showInputDialog(this, "Prescripción:", "Crear prescripción", JOptionPane.QUESTION_MESSAGE);
-            System.out.println(prescripcion);
-            Consulta nueva = new Consulta(cita, prescripcion);
-            cita.getPaciente().agregarConsulta(nueva);
-            cita.setEstado(EstadoCita.COMPLETADA);
+            JTextArea textArea = new JTextArea(8, 40);
+            textArea.setLineWrap(true);
+            textArea.setWrapStyleWord(true);
+            JScrollPane scrollPane = new JScrollPane(textArea);
+
+            int opcion = JOptionPane.showConfirmDialog(this, scrollPane, "Prescripcion:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+            if (opcion == JOptionPane.OK_OPTION){
+                String prescripcion = textArea.getText();
+                Consulta nueva = new Consulta(cita, prescripcion);
+                cita.getPaciente().agregarConsulta(nueva);
+                cita.setEstado(EstadoCita.COMPLETADA);
+                cargarTablaConsultas((Paciente) SeleccionPaciente.getSelectedItem());
+            }
         }
     }//GEN-LAST:event_BotonPrescripcionActionPerformed
 
@@ -694,7 +782,7 @@ public class VistaMedico extends javax.swing.JFrame {
         Paciente paciente = (Paciente) SeleccionPaciente.getSelectedItem();
 
         if (filaSeleccionada == -1){
-            JOptionPane.showMessageDialog(this, "Por favor, selecciona una prueba", "Error", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Selecciona una prueba", "Error", JOptionPane.WARNING_MESSAGE);
             return null;
         }
 
@@ -723,6 +811,85 @@ public class VistaMedico extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_TablaPruebasMousePressed
+
+    
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Paciente paciente = (Paciente) SeleccionPaciente.getSelectedItem();
+        if(paciente == null) return;
+
+        String nombre = JOptionPane.showInputDialog(this, "Nombre de la prueba:", "Añadir prueba", JOptionPane.QUESTION_MESSAGE);
+        if(nombre == null){
+            return;
+        }
+        
+        String centro = JOptionPane.showInputDialog(this, "Centro:", "Añadir prueba", JOptionPane.QUESTION_MESSAGE);
+        
+        JTextArea textArea = new JTextArea(8, 40);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        int opcion = JOptionPane.showConfirmDialog(this, scrollPane, "Informe:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (opcion == JOptionPane.OK_OPTION){
+            String informe = textArea.getText();
+            PruebaLaboratorio nuevo = new PruebaLaboratorio(nombre, LocalDate.now(), centro, informe);
+            paciente.agregarPrueba(nuevo);
+            cargarTablaPruebas(paciente);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        if(getPruebaSeleccionada().getClass() == PruebaImagen.class){
+            mostrarImagenPrueba((PruebaImagen) getPruebaSeleccionada());
+        }
+        
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Paciente paciente = (Paciente) SeleccionPaciente.getSelectedItem();
+        if (paciente == null) return;
+
+        String nombre = JOptionPane.showInputDialog(this, "Nombre de la prueba:", "Añadir prueba de imagen", JOptionPane.QUESTION_MESSAGE);
+        if (nombre == null) return;
+
+        String centro = JOptionPane.showInputDialog(this, "Centro:", "Añadir prueba de imagen", JOptionPane.QUESTION_MESSAGE);
+        if (centro == null) return;
+
+        JTextArea textArea = new JTextArea(8, 40);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+
+        int opcion = JOptionPane.showConfirmDialog(this, scrollPane, "Informe médico:", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (opcion != JOptionPane.OK_OPTION) return;
+
+        String informe = textArea.getText();
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar imagen");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("jpg", "jpeg", "png"));
+
+        int resultado = fileChooser.showOpenDialog(this);
+        PruebaImagen nueva;
+
+        if (resultado == JFileChooser.APPROVE_OPTION){
+            File archivo = fileChooser.getSelectedFile();
+            try{
+                byte[] imagenBytes = java.nio.file.Files.readAllBytes(archivo.toPath());
+                nueva = new PruebaImagen(nombre, LocalDate.now(), centro, informe, imagenBytes);
+            } catch (Exception e){
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            nueva = new PruebaImagen(nombre, LocalDate.now(), centro, informe);
+        }
+
+        paciente.agregarPrueba(nueva);
+        cargarTablaPruebas(paciente);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -759,8 +926,11 @@ public class VistaMedico extends javax.swing.JFrame {
     private javax.swing.JTable TablaPruebas;
     private javax.swing.JTable TablaVacunas;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
