@@ -41,6 +41,22 @@ public abstract class Usuario implements Serializable {
         return nombre;
     }
     
+    public void setNombre(String nombre){
+       this.nombre = nombre; 
+    }
+
+    public void setTipo(TipoUsuario tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+    
+    public void setDni(String dni){
+        this.dni = dni;
+    }
+    
     @Override
     public boolean equals(Object obj){
         if(obj == this) return true;

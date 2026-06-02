@@ -22,6 +22,12 @@ public class Sistema implements Serializable {
         citas = new ArrayList<>();
     }
     
+    public void actualizarUsuario(Paciente paciente, String nombre, String telefono, String direccion){
+        paciente.setNombre(nombre);
+        paciente.setTelefono(telefono);
+        paciente.setDireccion(direccion);
+    }
+    
     public List<Usuario> getTodosUsuarios(){ return usuarios; }
     public List<Cita> getTodasCitas(){ return citas; }
     

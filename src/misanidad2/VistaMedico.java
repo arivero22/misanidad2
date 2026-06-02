@@ -869,7 +869,6 @@ public class VistaMedico extends javax.swing.JFrame {
 
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Seleccionar imagen");
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("jpg", "jpeg", "png"));
 
         int resultado = fileChooser.showOpenDialog(this);
         PruebaImagen nueva;

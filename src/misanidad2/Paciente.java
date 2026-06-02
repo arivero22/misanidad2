@@ -39,6 +39,14 @@ public class Paciente extends Usuario {
     
     public void setTelefono(String telefono){ this.telefono = telefono; }
     
+    public void setDireccion(String direccion){
+        this.direccion = direccion;
+    }
+    
+    public void setCipa(String cipa){
+        this.cipa = cipa;
+    }
+    
     public void agregarMedicamento(Medicamento medicamento){ medicamentos.add(medicamento); }
     public void borrarMedicamento(Medicamento medicamento){ medicamentos.remove(medicamento); }
     

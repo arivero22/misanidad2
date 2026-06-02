@@ -29,7 +29,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         cargarTablaCitas(sistema);
     }
     
-    private void cargarTablaCitas(Sistema sistema){
+    public void cargarTablaCitas(Sistema sistema){
         String[] columnas = {"Paciente", "Médico", "Estado", "Fecha", "Hora", "Motivo", "Fecha solicitud", "Centro", "Telefonica", "Motivo cancelación", "Fecha cancelación"};
         
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
@@ -60,7 +60,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         }
     }
     
-    private void cargarTablaPacientes(Sistema sistema){
+    public void cargarTablaPacientes(Sistema sistema){
         String[] columnas = {"Nombre", "DNI", "CIPA", "Teléfono", "Dirección"};
         
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
@@ -79,7 +79,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         }
     }
     
-    private void cargarTablaEmpleados(Sistema sistema){
+    public void cargarTablaEmpleados(Sistema sistema){
         String[] columnas = {"Nombre", "DNI", "Tipo", "Especialidad"};
         
         DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
@@ -103,6 +103,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
             TablaEmpleados.setAutoCreateRowSorter(true);
         }
     }
+
     
     private void crearNuevoUsuario(){
         //tipo
@@ -301,6 +302,11 @@ public class VistaAdministrador extends javax.swing.JFrame {
         });
 
         BotonEditarPaciente.setText("Editar");
+        BotonEditarPaciente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEditarPacienteActionPerformed(evt);
+            }
+        });
 
         BotonNuevoPaciente.setText("Nuevo");
         BotonNuevoPaciente.addActionListener(new java.awt.event.ActionListener() {
@@ -361,6 +367,11 @@ public class VistaAdministrador extends javax.swing.JFrame {
         });
 
         BotonEditarEmpleado.setText("Editar");
+        BotonEditarEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEditarEmpleadoActionPerformed(evt);
+            }
+        });
 
         BotonNuevoEmpleado.setText("Nuevo");
         BotonNuevoEmpleado.addActionListener(new java.awt.event.ActionListener() {
@@ -533,30 +544,39 @@ public class VistaAdministrador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BotonBorrarEmpleadoActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void BotonEditarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEditarPacienteActionPerformed
+        // TODO add your handling code here:
+        new VistaEditarPaciente(this, sistema, getPacienteSeleccionado()).setVisible(true);
+    }//GEN-LAST:event_BotonEditarPacienteActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VistaAdministrador().setVisible(true));
+    private Paciente getPacienteSeleccionado(){
+        int filaVista = TablaUsuarios.getSelectedRow();
+        
+        if (filaVista == -1){
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        
+        int filaModelo = TablaUsuarios.convertRowIndexToModel(filaVista);
+        return sistema.getTodosPacientes().get(filaModelo);
     }
+    
+    private Usuario getEmpleadoSeleccionado(){
+        int filaVista = TablaEmpleados.getSelectedRow();
+        
+        if (filaVista == -1){
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        
+        int filaModelo = TablaEmpleados.convertRowIndexToModel(filaVista);
+        return sistema.getTodosEmpleados().get(filaModelo);
+    }
+    
+    private void BotonEditarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEditarEmpleadoActionPerformed
+        // TODO add your handling code here:
+        new VistaEditarEmpleado(this, sistema, getEmpleadoSeleccionado()).setVisible(true);
+    }//GEN-LAST:event_BotonEditarEmpleadoActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonBorrarCita;

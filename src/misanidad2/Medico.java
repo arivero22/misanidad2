@@ -20,4 +20,8 @@ public class Medico extends Usuario {
     
     public Especialidad getEspecialidad(){ return especialidad; }
     public Agenda getAgenda(){ return agenda; }
+    
+    public void setEspecialidad(Especialidad e){
+        especialidad = e;
+    }
 }
