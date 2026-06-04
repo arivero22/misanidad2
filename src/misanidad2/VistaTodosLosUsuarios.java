@@ -198,7 +198,7 @@ public class VistaTodosLosUsuarios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VistaTodosLosUsuarios().setVisible(true));
+      //  java.awt.EventQueue.invokeLater(() -> new VistaTodosLosUsuarios().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

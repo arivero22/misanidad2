@@ -18,11 +18,10 @@ public class VistaEditarPaciente extends javax.swing.JFrame {
     /**
      * Creates new form VistaEditarPaciente
      */
-    public VistaEditarPaciente(VistaAdministrador v, Sistema sistema, Paciente paciente) {
-        this.v = v; 
+    public VistaEditarPaciente(Sistema sistema, Paciente paciente, VistaAdministrador v) {
         this.sistema = sistema; 
         this.paciente = paciente; 
-        
+        this.v = v; 
         initComponents();
         
         campoNombre.setText(paciente.getNombre()); 

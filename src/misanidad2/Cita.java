@@ -53,4 +53,17 @@ public class Cita implements Serializable {
     public void setMotivoCancelacion(String motivo){ motivo_cancelacion = motivo; }
     public void setFechaCancelacion(LocalDateTime fecha_hora){ fecha_cancelacion = fecha_hora; }
     public void setTelefonica(boolean telefonica){ this.telefonica = telefonica; }
+
+    public void setFecha_hora(LocalDateTime fecha_hora) {
+        this.fecha_hora = fecha_hora;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
+    }
+
+    public void setCentro(String centro) {
+        this.centro = centro;
+    }
+    
 }

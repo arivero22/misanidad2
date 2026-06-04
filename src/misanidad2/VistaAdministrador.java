@@ -5,6 +5,7 @@
 package misanidad2;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -233,7 +234,19 @@ public class VistaAdministrador extends javax.swing.JFrame {
             }
         }
     }
-
+    
+    private Cita getCitaSeleccionada(){
+        int fila = TablaCitas.getSelectedRow(); 
+        if(fila == -1){
+            JOptionPane.showMessageDialog(this,"Selecione una cita", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        int filaSel = TablaCitas.convertRowIndexToModel(fila); 
+        List<Cita> lista = sistema.getTodasCitas(); 
+        if (filaSel >= lista.size()) return null; 
+        
+        return lista.get(filaSel); 
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -427,6 +440,11 @@ public class VistaAdministrador extends javax.swing.JFrame {
         BotonBorrarCita.setText("Borrar");
 
         BotonEditarCita.setText("Editar");
+        BotonEditarCita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonEditarCitaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -546,7 +564,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
     private void BotonEditarPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEditarPacienteActionPerformed
         // TODO add your handling code here:
-        new VistaEditarPaciente(this, sistema, getPacienteSeleccionado()).setVisible(true);
+        new VistaEditarPaciente(sistema, getPacienteSeleccionado(),this).setVisible(true);
     }//GEN-LAST:event_BotonEditarPacienteActionPerformed
 
     private Paciente getPacienteSeleccionado(){
@@ -577,6 +595,25 @@ public class VistaAdministrador extends javax.swing.JFrame {
         // TODO add your handling code here:
         new VistaEditarEmpleado(this, sistema, getEmpleadoSeleccionado()).setVisible(true);
     }//GEN-LAST:event_BotonEditarEmpleadoActionPerformed
+
+    private void BotonEditarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonEditarCitaActionPerformed
+        // TODO add your handling code here:
+        Cita cita = getCitaSeleccionada(); 
+        if(cita == null) return; 
+        
+        if(cita.getEstado() == EstadoCita.COMPLETADA){
+            JOptionPane.showMessageDialog(this, "No se puede editar una cita ya completada.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+        
+        if(cita.getEstado() == EstadoCita.CANCELADA){
+            JOptionPane.showMessageDialog(this, "No se puede editar una cita cancelada.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        VistaEditarCita ventana = new VistaEditarCita(sistema, cita); 
+        ventana.setVisible(true); 
+        
+    }//GEN-LAST:event_BotonEditarCitaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonBorrarCita;

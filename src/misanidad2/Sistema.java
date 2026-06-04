@@ -17,11 +17,21 @@ public class Sistema implements Serializable {
     private List<Usuario> usuarios;
     private List<Cita> citas;
     
+    
     public Sistema(){
         usuarios = new ArrayList<>();
         citas = new ArrayList<>();
     }
     
+    public Paciente buscarPacientePorDni(String dni){
+        for(Usuario u : usuarios){
+            if(u.getTipo() == TipoUsuario.PACIENTE && u.getDni().equals(dni)){
+                return (Paciente) u; 
+            }
+        }
+        return null; 
+    }
+
     public void actualizarUsuario(Paciente paciente, String nombre, String telefono, String direccion){
         paciente.setNombre(nombre);
         paciente.setTelefono(telefono);

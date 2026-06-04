@@ -921,7 +921,7 @@ public class VistaPaciente extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VistaPaciente().setVisible(true));
+       // java.awt.EventQueue.invokeLater(() -> new VistaPaciente().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

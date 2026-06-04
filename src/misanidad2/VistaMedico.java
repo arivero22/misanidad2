@@ -912,7 +912,7 @@ public class VistaMedico extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VistaMedico().setVisible(true));
+       // java.awt.EventQueue.invokeLater(() -> new VistaMedico().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
