@@ -21,13 +21,16 @@ public class VistaEditarCita extends javax.swing.JFrame {
     /**
      * Creates new form VistaEditarCita
      */
-    private Cita cita; 
+    private Paciente paciente; 
     private Sistema sistema; 
+    private Cita cita; 
     
-    public VistaEditarCita(Sistema sistema, Cita cita) {
+    public VistaEditarCita(Sistema sistema, Paciente paciente) {
         initComponents();
-        this.cita = cita; 
+        this.paciente = paciente; 
         this.sistema = sistema; 
+        this.cita = null; 
+        
         cargarDatos(); 
     }
 

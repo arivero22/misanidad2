@@ -153,8 +153,7 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
     private void btnNuevaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaActionPerformed
         // TODO add your handling code here:
         Paciente p = getPacienteSeleccionado(); 
-        if(p == null){
-        }
+        if(p == null) return; 
         VistaEditarCita v = new VistaEditarCita(sistema, p); 
         v.setVisible(true);
     }//GEN-LAST:event_btnNuevaActionPerformed
