@@ -26,6 +26,7 @@ public class VistaInicioSesion extends javax.swing.JFrame {
         BotonIniciarSesion.requestFocusInWindow();
         UsuarioCampoTexto.setText("DNI / CIPA");
         UsuarioCampoTexto.setForeground(java.awt.Color.GRAY);
+        setLocationRelativeTo(null);
     }
     
     private void login(){
@@ -62,7 +63,8 @@ public class VistaInicioSesion extends javax.swing.JFrame {
                 System.out.println("Loggeado como medico");
                 break;
             case TipoUsuario.PERSONAL_ADMINISTRACION:
-                //abrirVentanaAdministracion((PersonalAdministracion) usuario);
+                this.dispose();
+                new VistaAdminCentroSalud(sistema, (PersonalAdministracion) usuario).setVisible(true);
                 System.out.println("Loggeado como pers admin");
                 break;
             case TipoUsuario.ADMINISTRADOR:
@@ -123,15 +125,13 @@ public class VistaInicioSesion extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(162, 162, 162)
-                .addComponent(BotonIniciarSesion)
-                .addContainerGap(163, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(134, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(UsuarioCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(UsuarioCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(BotonIniciarSesion)
+                        .addComponent(jLabel1)))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -140,9 +140,9 @@ public class VistaInicioSesion extends javax.swing.JFrame {
                 .addComponent(UsuarioCampoTexto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4)
                 .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(BotonIniciarSesion)
-                .addContainerGap(121, Short.MAX_VALUE))
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         pack();

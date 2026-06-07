@@ -13,6 +13,7 @@ public class VistaEditarPaciente extends javax.swing.JFrame {
     private Sistema sistema; 
     private Paciente paciente; 
     private VistaAdministrador v; 
+    private VistaAdminCentroSalud v_cs;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VistaEditarPaciente.class.getName());
 
     /**
@@ -22,6 +23,21 @@ public class VistaEditarPaciente extends javax.swing.JFrame {
         this.sistema = sistema; 
         this.paciente = paciente; 
         this.v = v; 
+        this.v_cs = null;
+        initComponents();
+        
+        campoNombre.setText(paciente.getNombre()); 
+        campoDni.setText(paciente.getDni());
+        campoCipa.setText(paciente.getCipa());
+        campoTelf.setText(paciente.getTelefono());
+        campoDir.setText(paciente.getDireccion());        
+    }
+    
+    public VistaEditarPaciente(Sistema sistema, Paciente paciente, VistaAdminCentroSalud v) {
+        this.sistema = sistema; 
+        this.paciente = paciente; 
+        this.v = null; 
+        this.v_cs = v;
         initComponents();
         
         campoNombre.setText(paciente.getNombre()); 
@@ -180,7 +196,14 @@ public class VistaEditarPaciente extends javax.swing.JFrame {
         
         GestorArchivos.guardarSistema(sistema);
         
-        v.cargarTablaPacientes(sistema);
+        if(v != null){
+            v.cargarTablaPacientes(sistema);
+        }
+        
+        if(v_cs != null){
+            v_cs.cargarTablaPacientes(sistema);
+        }
+        
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 

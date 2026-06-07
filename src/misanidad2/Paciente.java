@@ -16,6 +16,7 @@ public class Paciente extends Usuario {
     private List<Vacuna> vacunas;
     private List<Consulta> historial_clinico;
     private List<PruebaLaboratorio> pruebas;
+    private List<Notificacion> notificaciones;
     
     
     public Paciente(String nombre, String dni, String cipa, String telefono, String direccion){
@@ -27,6 +28,7 @@ public class Paciente extends Usuario {
         this.vacunas = new ArrayList<>();
         this.historial_clinico = new ArrayList<>();
         this.pruebas = new ArrayList<>();
+        this.notificaciones = new ArrayList<>();
     }
     
     public String getCipa(){ return cipa; }
@@ -36,6 +38,7 @@ public class Paciente extends Usuario {
     public List<Vacuna> getVacunas(){ return vacunas; }
     public List<Consulta> getHistorialClinico(){ return historial_clinico; }
     public List<PruebaLaboratorio> getPruebas(){ return pruebas; }
+    public List<Notificacion> getNotificaciones(){ return notificaciones; }
     
     public void setTelefono(String telefono){ this.telefono = telefono; }
     

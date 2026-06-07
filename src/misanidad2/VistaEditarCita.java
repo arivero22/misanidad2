@@ -11,7 +11,9 @@ package misanidad2;
  */
 import java.time.LocalDateTime; 
 import java.time.ZoneId; 
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class VistaEditarCita extends javax.swing.JFrame {
@@ -21,17 +23,29 @@ public class VistaEditarCita extends javax.swing.JFrame {
     /**
      * Creates new form VistaEditarCita
      */
-    private Paciente paciente; 
-    private Sistema sistema; 
     private Cita cita; 
+    private Sistema sistema; 
+    private VistaAdministrador ventana_anterior_admin;
+    private VistaAdminCentroSalud ventana_anterior_centrosalud;
     
-    public VistaEditarCita(Sistema sistema, Paciente paciente) {
+    public VistaEditarCita(Sistema sistema, Cita cita, VistaAdministrador v) {
         initComponents();
-        this.paciente = paciente; 
+        this.cita = cita; 
         this.sistema = sistema; 
-        this.cita = null; 
-        
+        ventana_anterior_admin = v;
+        ventana_anterior_centrosalud = null;
         cargarDatos(); 
+        setLocationRelativeTo(null);
+    }
+    
+    public VistaEditarCita(Sistema sistema, Cita cita, VistaAdminCentroSalud ventana_anterior_centrosalud) {
+        initComponents();
+        this.cita = cita; 
+        this.sistema = sistema; 
+        ventana_anterior_admin = null;
+        this.ventana_anterior_centrosalud = ventana_anterior_centrosalud;
+        cargarDatos(); 
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -43,8 +57,6 @@ public class VistaEditarCita extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -52,22 +64,20 @@ public class VistaEditarCita extends javax.swing.JFrame {
         checkTelefonica = new javax.swing.JCheckBox();
         jSeparator2 = new javax.swing.JSeparator();
         btnGuardarCambios = new javax.swing.JButton();
-        btnCancelarCita = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        txtPaciente = new javax.swing.JTextField();
-        txtMedico = new javax.swing.JTextField();
         txtMotivo = new javax.swing.JTextField();
         txtCentro = new javax.swing.JTextField();
         txtMotivoCancelacion = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jSpinnerFecha = new javax.swing.JSpinner();
-        jLabel8 = new javax.swing.JLabel();
-        jSpinnerHora = new javax.swing.JSpinner();
+        fechahora_txt_field = new javax.swing.JTextField();
+        seleccionPaciente = new javax.swing.JComboBox<>();
+        seleccionMedico = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        seleccionEstado = new javax.swing.JComboBox<>();
+        txtEspecialidad = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jLabel1.setText("Editar Cita");
 
         jLabel2.setText("Paciente:");
 
@@ -83,19 +93,10 @@ public class VistaEditarCita extends javax.swing.JFrame {
         btnGuardarCambios.setText("Guardar Cambios");
         btnGuardarCambios.addActionListener(this::btnGuardarCambiosActionPerformed);
 
-        btnCancelarCita.setText("Cancelar Cita");
-        btnCancelarCita.addActionListener(this::btnCancelarCitaActionPerformed);
-
         btnCancelar.setText("Cancelar");
         btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         jLabel6.setText("Motivo cancelación:");
-
-        txtPaciente.setText("txtPaciente");
-        txtPaciente.addActionListener(this::txtPacienteActionPerformed);
-
-        txtMedico.setText("txtMedico");
-        txtMedico.addActionListener(this::txtMedicoActionPerformed);
 
         txtMotivo.setText("txtMotivo");
         txtMotivo.addActionListener(this::txtMotivoActionPerformed);
@@ -103,105 +104,119 @@ public class VistaEditarCita extends javax.swing.JFrame {
         txtCentro.setText("txtCentro");
         txtCentro.addActionListener(this::txtCentroActionPerformed);
 
-        txtMotivoCancelacion.setText("txtCancelacion");
         txtMotivoCancelacion.addActionListener(this::txtMotivoCancelacionActionPerformed);
 
-        jLabel7.setText("Fecha:");
+        jLabel7.setText("Fecha y hora:");
 
-        jLabel8.setText("Hora:");
+        fechahora_txt_field.setText("jTextField1");
+
+        seleccionMedico.addActionListener(this::seleccionMedicoActionPerformed);
+
+        jLabel9.setText("Estado");
+
+        seleccionEstado.addActionListener(this::seleccionEstadoActionPerformed);
+
+        txtEspecialidad.setText("Especialidad:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
             .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(btnGuardarCambios, javax.swing.GroupLayout.DEFAULT_SIZE, 125, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelarCita, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addComponent(jLabel1))
+                        .addComponent(btnGuardarCambios, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                        .addGap(160, 160, 160)
+                        .addComponent(btnCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(16, 16, 16))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE))
+                                        .addGap(17, 17, 17)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtMotivo, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+                                            .addComponent(txtCentro))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtMedico)
-                                            .addComponent(txtMotivo)
-                                            .addComponent(txtCentro)))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel2)
+                                                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel9)
+                                                .addGap(88, 88, 88)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(seleccionEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(seleccionPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(seleccionMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(checkTelefonica)
-                                    .addComponent(jLabel7)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jSpinnerHora, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jSpinnerFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtMotivoCancelacion, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(fechahora_txt_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtEspecialidad)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(txtMotivoCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(checkTelefonica)
-                    .addComponent(txtPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(seleccionPaciente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(seleccionMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtEspecialidad)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(checkTelefonica)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7)
-                    .addComponent(jSpinnerFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7)
+                        .addComponent(fechahora_txt_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel9)
+                        .addComponent(seleccionEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(txtMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
-                    .addComponent(jSpinnerHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMotivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(txtCentro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
                 .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtMotivoCancelacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnGuardarCambios)
-                    .addComponent(btnCancelarCita)
                     .addComponent(btnCancelar))
                 .addGap(21, 21, 21))
         );
@@ -213,36 +228,46 @@ public class VistaEditarCita extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_checkTelefonicaActionPerformed
 
-    private void btnCancelarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarCitaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelarCitaActionPerformed
-
     private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         // TODO add your handling code here:
         try{
-            String nuevoMotivo = txtMotivo.getText(); 
-            String nuevoCentro = txtCentro.getText(); 
-            boolean nuevaTelefonia = checkTelefonica.isSelected();
+            Paciente paciente = (Paciente) seleccionPaciente.getSelectedItem();
+            Medico medico = (Medico) seleccionMedico.getSelectedItem();
+            EstadoCita estado = (EstadoCita) seleccionEstado.getSelectedItem();
+            String nuevoMotivo = txtMotivo.getText();
+            String nuevoCentro = txtCentro.getText();
+            boolean nuevaTelefonica = checkTelefonica.isSelected();
+            String fecha_hora_str = fechahora_txt_field.getText();
             
-            Date fechaSeleccionada = (Date) jSpinnerFecha.getValue(); 
-            Date horaSeleccionada = (Date) jSpinnerHora.getValue(); 
+            LocalDateTime fecha_hora = LocalDateTime.parse(fecha_hora_str, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
             
-            LocalDateTime fecha = fechaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(); 
-            LocalDateTime hora = horaSeleccionada.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime(); 
+            cita.setPaciente(paciente);
+            cita.setMedico(medico);
+            cita.setEstado(estado);
+            cita.setMotivo(nuevoMotivo);
+            cita.setCentro(nuevoCentro);
+            cita.setFecha_hora(fecha_hora);
+            if(medico.getEspecialidad() == Especialidad.GENERAL){
+                cita.setTelefonica(nuevaTelefonica);
+            }
             
-            LocalDateTime nueva = LocalDateTime.of(fecha.getYear(), fecha.getMonth(),
-                                                   fecha.getDayOfMonth(), hora.getHour(), 
-                                                   hora.getMinute()); 
+            if(estado == EstadoCita.CANCELADA){
+                cita.setMotivoCancelacion(txtMotivoCancelacion.getText());
+                cita.setFechaCancelacion(LocalDateTime.now());
+            }
             
-            cita.setMotivo(nuevoMotivo); 
-            cita.setCentro(nuevoCentro); 
-            cita.setFecha_hora(nueva);
-            cita.setTelefonica(nuevaTelefonia);
             
             GestorArchivos.guardarSistema(sistema);
             
             JOptionPane.showMessageDialog(this, "Datos guardados.");
             this.dispose();
+            if(ventana_anterior_admin != null){
+                ventana_anterior_admin.cargarTablaCitas(sistema);
+            }
+            
+            if(ventana_anterior_centrosalud != null){
+                ventana_anterior_centrosalud.cargarTablaCitas(sistema);
+            }
             
         }catch (Exception e){
             JOptionPane.showMessageDialog(this, e.getMessage());
@@ -251,15 +276,8 @@ public class VistaEditarCita extends javax.swing.JFrame {
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
-
-    private void txtPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPacienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPacienteActionPerformed
-
-    private void txtMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMedicoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMedicoActionPerformed
 
     private void txtMotivoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMotivoActionPerformed
         // TODO add your handling code here:
@@ -272,23 +290,66 @@ public class VistaEditarCita extends javax.swing.JFrame {
     private void txtMotivoCancelacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMotivoCancelacionActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtMotivoCancelacionActionPerformed
+
+    private void seleccionEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionEstadoActionPerformed
+        // TODO add your handling code here:
+        if(seleccionEstado.getSelectedItem() == EstadoCita.CANCELADA){
+            txtMotivoCancelacion.setEditable(true);
+            txtMotivoCancelacion.setText(cita.getMotivoCancelacion()); 
+        }else{
+            txtMotivoCancelacion.setEditable(false);
+            txtMotivoCancelacion.setText("");
+        }
+    }//GEN-LAST:event_seleccionEstadoActionPerformed
+
+    private void seleccionMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_seleccionMedicoActionPerformed
+        // TODO add your handling code here:
+        Medico m = (Medico) seleccionMedico.getSelectedItem();
+        txtEspecialidad.setText("Especialidad:\n"+m.getEspecialidad());
+        
+        if(m.getEspecialidad() == Especialidad.GENERAL){
+            checkTelefonica.setEnabled(true);
+        } else {
+            checkTelefonica.setEnabled(false);
+            checkTelefonica.setSelected(false);
+        }
+    }//GEN-LAST:event_seleccionMedicoActionPerformed
     private void cargarDatos(){
-        txtPaciente.setText(cita.getPaciente().getNombre());
-        txtMedico.setText(cita.getMedico().getNombre());
+        for(Paciente p : sistema.getTodosPacientes()){
+            seleccionPaciente.addItem(p);
+        }
+        seleccionPaciente.setSelectedItem(cita.getPaciente());
+        
+        for(Medico m : sistema.getTodosMedicos()){
+            seleccionMedico.addItem(m);
+        }
+        seleccionMedico.setSelectedItem(cita.getMedico());
+        
+        txtEspecialidad.setText("Especialidad:\n"+cita.getMedico().getEspecialidad());
+        if(cita.getMedico().getEspecialidad() == Especialidad.GENERAL){
+            checkTelefonica.setEnabled(true);
+        } else {
+            checkTelefonica.setEnabled(false);
+            checkTelefonica.setSelected(false);
+        }
+        
+        for(EstadoCita e : EstadoCita.values()){
+            seleccionEstado.addItem(e);
+        }
+        seleccionEstado.setSelectedItem(cita.getEstado());
+        
         txtMotivo.setText(cita.getMotivo());
         txtCentro.setText(cita.getCentro());
         checkTelefonica.setSelected(cita.isTelefonica());
         
-        LocalDateTime fechaHora = cita.getFechaHora(); 
-        Date fecha = Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant()); 
-        jSpinnerFecha.setValue(fecha);
-        jSpinnerHora.setValue(fecha); 
+        fechahora_txt_field.setText(cita.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         
-        if(cita.getEstado() == EstadoCita.CANCELADA){
-            txtMotivoCancelacion.setVisible(true);
+        if(seleccionEstado.getSelectedItem() == EstadoCita.CANCELADA){
+            txtMotivoCancelacion.setEditable(true);
             txtMotivoCancelacion.setText(cita.getMotivoCancelacion()); 
         }else{
-            txtMotivoCancelacion.setVisible(false); 
+            txtMotivoCancelacion.setEditable(false);
+            txtMotivoCancelacion.setText("");
         }
     }
     /**
@@ -318,25 +379,23 @@ public class VistaEditarCita extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnCancelarCita;
     private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JCheckBox checkTelefonica;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField fechahora_txt_field;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSpinner jSpinnerFecha;
-    private javax.swing.JSpinner jSpinnerHora;
+    private javax.swing.JComboBox<EstadoCita> seleccionEstado;
+    private javax.swing.JComboBox<Medico> seleccionMedico;
+    private javax.swing.JComboBox<Paciente> seleccionPaciente;
     private javax.swing.JTextField txtCentro;
-    private javax.swing.JTextField txtMedico;
+    private javax.swing.JLabel txtEspecialidad;
     private javax.swing.JTextField txtMotivo;
     private javax.swing.JTextField txtMotivoCancelacion;
-    private javax.swing.JTextField txtPaciente;
     // End of variables declaration//GEN-END:variables
 }

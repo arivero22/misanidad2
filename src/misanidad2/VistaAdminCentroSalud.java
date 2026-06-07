@@ -4,6 +4,8 @@
  */
 package misanidad2;
 
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -23,14 +25,88 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
     private Sistema sistema; 
     private PersonalAdministracion admin; 
     private VistaAdministrador ventanaAnterior; 
-    public VistaAdminCentroSalud(VistaAdministrador ventanaAnterior, Sistema sistema, PersonalAdministracion admin) {
+    public VistaAdminCentroSalud(Sistema sistema, PersonalAdministracion admin) {
         initComponents();
-        this.ventanaAnterior = ventanaAnterior; 
         this.sistema = sistema; 
         this.admin = admin; 
         
         setLocationRelativeTo(null); 
-        cargarTablaPaciente(); 
+        cargarTablaPacientes(sistema); 
+    }
+    
+    private Cita getCitaSeleccionada(){
+        int fila = TablaCitas.getSelectedRow(); 
+        if(fila == -1){
+            JOptionPane.showMessageDialog(this,"Selecione una cita", "Error", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        int filaSel = TablaCitas.convertRowIndexToModel(fila); 
+        List<Cita> lista = sistema.getCitasParaPaciente(getPacienteSeleccionado()); 
+        if (filaSel >= lista.size()) return null; 
+        
+        return lista.get(filaSel); 
+    }
+    
+    public void cargarTablaPacientes(Sistema sistema){
+        String[] columnas = {"Nombre", "DNI", "CIPA", "Teléfono", "Dirección"};
+        
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        
+        for(Paciente p : sistema.getTodosPacientes()){
+            Object[] fila = {p.getNombre(), p.getDni(), p.getCipa(), p.getTelefono(), p.getDireccion()};
+            modelo.addRow(fila);
+            
+            TablaPacientes.setModel(modelo);
+            TablaPacientes.setAutoCreateRowSorter(true);
+        }
+    }
+    
+    public Paciente getPacienteSeleccionado(){
+        int filaVista = TablaPacientes.getSelectedRow();
+        
+        if (filaVista == -1){
+            JOptionPane.showMessageDialog(this, "Seleccione un usuario", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return null;
+        }
+        
+        int filaModelo = TablaPacientes.convertRowIndexToModel(filaVista);
+        return sistema.getTodosPacientes().get(filaModelo);
+    }
+    
+    public void cargarTablaCitas(Sistema sistema){
+        String[] columnas = {"Paciente", "Médico", "Estado", "Fecha", "Hora", "Motivo", "Fecha solicitud", "Centro", "Telefonica", "Motivo cancelación", "Fecha cancelación"};
+        
+        DefaultTableModel modelo = new DefaultTableModel(columnas, 0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        
+        for(Cita c : sistema.getCitasParaPaciente(getPacienteSeleccionado())){
+            Object[] fila = {
+                c.getPaciente().getNombre(),
+                c.getMedico().getNombre(),
+                c.getEstado(),
+                c.getFechaHora().toLocalDate(),
+                c.getFechaHora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")),
+                c.getMotivo(),
+                c.getFechaSolicitud().toLocalDate()+" "+c.getFechaSolicitud().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")),
+                c.getCentro(),
+                c.isTelefonica() ? "Si" : "No",
+                c.getEstado()==EstadoCita.CANCELADA ? c.getMotivoCancelacion() : "---",
+                c.getEstado()==EstadoCita.CANCELADA ? c.getFechaCancelacion().toLocalDate()+" "+c.getFechaCancelacion().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")) : "---"
+            };
+            modelo.addRow(fila);
+            
+            TablaCitas.setModel(modelo);
+            TablaCitas.setAutoCreateRowSorter(true);
+        }
     }
 
     /**
@@ -42,16 +118,23 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSeparator1 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jSeparator2 = new javax.swing.JSeparator();
         btnCerrarSesion = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
         btnEditar = new javax.swing.JButton();
         btnVer = new javax.swing.JButton();
-        btnNueva = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        TablaCitas = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TablaPacientes = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -62,48 +145,68 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
 
         jLabel2.setText("Pacientes");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Nombre", "DNI", "Teléfono", "Cipa", "Dirección"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable1);
-
-        btnEditar.setText("Editar datos");
+        btnEditar.setText("Editar paciente");
         btnEditar.addActionListener(this::btnEditarActionPerformed);
 
-        btnVer.setText("Ver citas");
+        btnVer.setText("Editar cita");
         btnVer.addActionListener(this::btnVerActionPerformed);
 
-        btnNueva.setText("Nueva cita ");
-        btnNueva.addActionListener(this::btnNuevaActionPerformed);
+        TablaCitas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(TablaCitas);
+
+        TablaPacientes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        TablaPacientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                TablaPacientesMousePressed(evt);
+            }
+        });
+        jScrollPane2.setViewportView(TablaPacientes);
+
+        jLabel3.setText("Citas");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1)
             .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 797, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCerrarSesion))
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnEditar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 68, Short.MAX_VALUE)
-                        .addComponent(btnVer)
-                        .addGap(62, 62, 62)
-                        .addComponent(btnNueva)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnVer))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,14 +221,15 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 4, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
-                    .addComponent(btnVer)
-                    .addComponent(btnNueva))
+                    .addComponent(btnVer))
                 .addGap(9, 9, 9))
         );
 
@@ -137,32 +241,28 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
         Paciente p = getPacienteSeleccionado(); 
         if(p == null) return; 
         
-        VistaEditarPaciente v = new VistaEditarPaciente(sistema, p,  ventanaAnterior); 
-        v.setVisible(true);
+         new VistaEditarPaciente(sistema, p, this).setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnVerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerActionPerformed
         // TODO add your handling code here:
-        Paciente p = getPacienteSeleccionado(); 
-        if(p==null) return; 
+        Cita c = getCitaSeleccionada();
+        if(c == null) return;
+        System.out.println(c.getPaciente());
         
-        VistaCitasPaciente v = new VistaCitasPaciente(sistema, p); 
-        v.setVisible(true); 
+        new VistaEditarCita(sistema, c, this).setVisible(true);
     }//GEN-LAST:event_btnVerActionPerformed
-
-    private void btnNuevaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaActionPerformed
-        // TODO add your handling code here:
-        Paciente p = getPacienteSeleccionado(); 
-        if(p == null) return; 
-        VistaEditarCita v = new VistaEditarCita(sistema, p); 
-        v.setVisible(true);
-    }//GEN-LAST:event_btnNuevaActionPerformed
 
     private void btnCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarSesionActionPerformed
         // TODO add your handling code here:
         new VistaInicioSesion(sistema).setVisible(true);
         dispose(); 
     }//GEN-LAST:event_btnCerrarSesionActionPerformed
+
+    private void TablaPacientesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaPacientesMousePressed
+        // TODO add your handling code here:
+        cargarTablaCitas(sistema);
+    }//GEN-LAST:event_TablaPacientesMousePressed
 
     /**
      * @param args the command line arguments
@@ -188,40 +288,21 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
         /* Create and display the form */
         //java.awt.EventQueue.invokeLater(() -> new VistaAdminCentroSalud().setVisible(true));
     }
-    private Paciente getPacienteSeleccionado(){
-        int fila = jTable1.getSelectedRow(); 
-        if(fila == -1){
-            JOptionPane.showMessageDialog(this, "Selecciona un paciente", "Error", JOptionPane.WARNING_MESSAGE);
-            return null; 
-        }
-        String dni = jTable1.getValueAt(fila, 1).toString(); 
-        return sistema.buscarPacientePorDni(dni); 
-    }
-    private void cargarTablaPaciente(){
-        DefaultTableModel modelo = (DefaultTableModel) jTable1.getModel(); 
-        modelo.setRowCount(0); 
-        
-        for(Paciente p : sistema.getTodosPacientes()){
-         modelo.addRow(new Object[]{
-             p.getNombre(),
-             p.getDni(),
-             p.getTelefono(), 
-             p.getCipa(),
-             p.getDireccion()
-         });
-        }
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable TablaCitas;
+    private javax.swing.JTable TablaPacientes;
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEditar;
-    private javax.swing.JButton btnNueva;
     private javax.swing.JButton btnVer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

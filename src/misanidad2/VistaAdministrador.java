@@ -610,7 +610,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "No se puede editar una cita cancelada.", "Error", JOptionPane.ERROR_MESSAGE);
         }
         
-        VistaEditarCita ventana = new VistaEditarCita(sistema, cita.getPaciente() ); 
+        VistaEditarCita ventana = new VistaEditarCita(sistema, cita, this);
         ventana.setVisible(true); 
         
     }//GEN-LAST:event_BotonEditarCitaActionPerformed

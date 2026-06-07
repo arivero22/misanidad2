@@ -26,6 +26,7 @@ public class VistaEditarEmpleado extends javax.swing.JFrame {
         campoNombre.setText(empleado.getNombre()); 
         campoDni.setText(empleado.getDni());
         campoTipo.setText(empleado.getTipo().toString()); 
+        setLocationRelativeTo(null);
         
         
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(Especialidad.values()));

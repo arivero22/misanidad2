@@ -4,6 +4,7 @@
  */
 package misanidad2;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -24,6 +25,7 @@ public class VistaTodosLosUsuarios extends javax.swing.JFrame {
         this.sistema = sistema;
         initComponents();
         cargarTablaUsuarios(sistema);
+        setLocationRelativeTo(null);
     }
     
     private void cargarTablaUsuarios(Sistema sistema){
@@ -63,22 +65,27 @@ public class VistaTodosLosUsuarios extends javax.swing.JFrame {
         switch(usuario.getTipo()){
             case TipoUsuario.PACIENTE:
                 this.dispose();
-                new VistaPaciente(sistema, (Paciente) usuario).setVisible(true);
-                System.out.println("Loggeado como paciente");
+                VistaPaciente vp = new VistaPaciente(sistema, (Paciente) usuario);
+                vp.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                vp.setVisible(true);
                 break;
             case TipoUsuario.MEDICO:
                 this.dispose();
-                new VistaMedico(sistema, (Medico) usuario).setVisible(true);
-                System.out.println("Loggeado como medico");
+                VistaMedico vm = new VistaMedico(sistema, (Medico) usuario);
+                vm.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                vm.setVisible(true);
                 break;
             case TipoUsuario.PERSONAL_ADMINISTRACION:
-                //abrirVentanaAdministracion((PersonalAdministracion) usuario);
-                System.out.println("Loggeado como pers admin");
+                this.dispose();
+                VistaAdminCentroSalud vac = new VistaAdminCentroSalud(sistema, (PersonalAdministracion) usuario);
+                vac.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                vac.setVisible(true);
                 break;
             case TipoUsuario.ADMINISTRADOR:
                 this.dispose();
-                new VistaAdministrador(sistema).setVisible(true);
-                System.out.println("Loggeado como admin");
+                VistaAdministrador va = new VistaAdministrador(sistema);
+                va.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                va.setVisible(true);
                 break;
             default:
                 System.out.println("Tipo no identificado");
