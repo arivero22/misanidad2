@@ -301,13 +301,13 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         TablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Nombre", "DNI", "CIPA", "Telefono", "Direccion"
             }
         ));
         jScrollPane1.setViewportView(TablaUsuarios);
@@ -431,13 +431,13 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         TablaCitas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Paciente", "Medico", "Estado", "Fecha", "Hora", "Motivo", "Fecha solicitud", "Centro", "Telefonica", "Motivo cancelacion", "Fecha cancelacion"
             }
         ));
         jScrollPane3.setViewportView(TablaCitas);

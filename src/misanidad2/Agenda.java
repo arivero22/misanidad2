@@ -61,7 +61,7 @@ public class Agenda implements Serializable {
         }
         
         for(Cita c : sistema.getTodasCitas()){
-            if(c.getMedico().equals(medico) && c.getEstado() == EstadoCita.PENDIENTE && c.getFechaHora().equals(fecha_hora)){
+            if(c.getMedico().equals(medico) && c.getEstado() == EstadoCita.CONFIRMADA && c.getFechaHora().equals(fecha_hora)){
                 return false;
             }
         }

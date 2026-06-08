@@ -18,19 +18,21 @@ public class GestorArchivos {
     
     public static Sistema cargarSistema(){
         File archivo = new File(ARCHIVO_DAT);
-        if (!archivo.exists()) {
+        if (!archivo.exists()){
             System.out.println("No se ha encontrado .dat");
             Sistema sistema = new Sistema();
-            sistema.datosPrueba(sistema);
+            sistema.datosPrueba();
             return sistema;
         }
         
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))){
             System.out.println("Datos cargados!! :)");
             return (Sistema) ois.readObject();
-        } catch (Exception e) {
+        } catch (Exception e){
             System.err.println("Error al cargar: " + e.getMessage());
-            return new Sistema();
+            Sistema sistema = new Sistema();
+            sistema.datosPrueba();
+            return sistema;
         }
     }
     
@@ -38,7 +40,7 @@ public class GestorArchivos {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARCHIVO_DAT))){
             oos.writeObject(sistema);
             System.out.println("Datos guardados.");
-        } catch (Exception e) {
+        } catch (Exception e){
             System.err.println("Error al guardar: " + e.getMessage());
         }
     }

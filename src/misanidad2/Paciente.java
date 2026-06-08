@@ -57,8 +57,10 @@ public class Paciente extends Usuario {
     public void borrarVacuna(Vacuna vacuna){ vacunas.remove(vacuna); }
     
     public void agregarConsulta(Consulta consulta){ historial_clinico.add(consulta); }
+    public void borrarConsulta(Consulta consulta){ historial_clinico.remove(consulta); }
     
     public void agregarPrueba(PruebaLaboratorio prueba){ pruebas.add(prueba); }
+    public void borrarPrueba(PruebaLaboratorio prueba){ pruebas.remove(prueba); }
     
     public void agregarNotificacion(Notificacion noti){ notificaciones.add(noti); }
 }

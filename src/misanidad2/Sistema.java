@@ -185,11 +185,11 @@ public class Sistema implements Serializable {
         return pacientes;
     }
     
-    public void datosPrueba(Sistema sistema){
-        Medico m1 = new Medico("Steve Rogers", "11111111A", Especialidad.GENERAL, sistema);
-        Medico m2 = new Medico("Juan Cuesta", "22222222B", Especialidad.GENERAL, sistema);
-        Medico m3 = new Medico("Andres Guerra", "33333333C", Especialidad.CARDIOLOGIA, sistema);
-        Medico m4 = new Medico("Mariano Delgado", "44444444D", Especialidad.ENFERMERIA, sistema);
+    public void datosPrueba(){
+        Medico m1 = new Medico("Steve Rogers", "11111111A", Especialidad.GENERAL, this);
+        Medico m2 = new Medico("Juan Cuesta", "22222222B", Especialidad.GENERAL, this);
+        Medico m3 = new Medico("Andres Guerra", "33333333C", Especialidad.CARDIOLOGIA, this);
+        Medico m4 = new Medico("Mariano Delgado", "44444444D", Especialidad.ENFERMERIA, this);
         Paciente p1 = new Paciente("Eren Jagger", "55555555E", "1234567890", "1234565789", "Shiganshina");
         Paciente p2 = new Paciente("Walter White", "66666666F", "9876545321", "951783654", "Nuevo Mexico");
         Paciente p3 = new Paciente("Jesse Pinkman", "77777777G", "6451563218", "321951756", "Nuevo Mexico");
