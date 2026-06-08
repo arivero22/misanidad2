@@ -44,7 +44,7 @@ public class Agenda implements Serializable {
         List<Cita> citas_dia = new ArrayList<>();
         
         for(Cita c : sistema.getTodasCitas()){
-            if(c.getMedico().equals(this.medico) && c.getFechaHora().toLocalDate().equals(fecha) && c.getEstado() == EstadoCita.PENDIENTE){
+            if(c.getMedico().equals(this.medico) && c.getFechaHora().toLocalDate().equals(fecha) && c.getEstado() == EstadoCita.CONFIRMADA){
                 citas_dia.add(c);
             }
         }

@@ -4,13 +4,14 @@
  */
 package misanidad2;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
  *
  * @author alvar
  */
-public class Notificacion {
+public class Notificacion implements Serializable {
     private String mensaje;
     private LocalDateTime fecha_hora;
     
@@ -18,7 +19,6 @@ public class Notificacion {
         this.mensaje = mensaje;
         fecha_hora = LocalDateTime.now();
     }
-   
     
     @Override
     public String toString(){

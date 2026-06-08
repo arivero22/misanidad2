@@ -194,6 +194,7 @@ public class VistaEditarPaciente extends javax.swing.JFrame {
         paciente.setTelefono(campoTelf.getText());
         paciente.setDireccion(campoDir.getText());
         
+        paciente.agregarNotificacion(new Notificacion("Un administrador ha modificado alguno de sus datos personales."));
         GestorArchivos.guardarSistema(sistema);
         
         if(v != null){

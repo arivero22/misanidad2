@@ -23,6 +23,17 @@ public class Sistema implements Serializable {
         citas = new ArrayList<>();
     }
     
+    public void notificarCitas(){
+        for(Cita c : citas){
+            long dias_diferencia = java.time.temporal.ChronoUnit.DAYS.between(LocalDate.now(), c.getFechaHora());
+            
+            if (dias_diferencia >= 0 && dias_diferencia <= 2 && c.getNotificada() == false) {
+                c.getPaciente().agregarNotificacion(new Notificacion("Tiene una cita dentro de "+dias_diferencia+" dias."));
+                c.setNotificada(true);
+            }
+        }
+    }
+    
     public Paciente buscarPacientePorDni(String dni){
         for(Usuario u : usuarios){
             if(u.getTipo() == TipoUsuario.PACIENTE && u.getDni().equals(dni)){
@@ -79,10 +90,12 @@ public class Sistema implements Serializable {
     
     public void registrarUsuario(Usuario u){
         usuarios.add(u);
+        GestorArchivos.guardarSistema(this);
     }
     
     public void eliminarUsuario(Usuario u){
         usuarios.remove(u);
+        GestorArchivos.guardarSistema(this);
     }
     
     public Usuario buscarUsuario(String id){
@@ -117,16 +130,19 @@ public class Sistema implements Serializable {
     
     public void registrarCita(Cita c){
         citas.add(c);
+        GestorArchivos.guardarSistema(this);
     }
     
-    public void eliminarCita(Usuario c){
-        usuarios.remove(c);
+    public void eliminarCita(Cita c){
+        citas.remove(c);
+        GestorArchivos.guardarSistema(this);
     }
     
     public void cancelarCita(Cita c, String motivo){
         c.setEstado(EstadoCita.CANCELADA);
         c.setMotivoCancelacion(motivo);
         c.setFechaCancelacion(LocalDateTime.now());
+        GestorArchivos.guardarSistema(this);
     }
     
     public List<Cita> getCitasParaPaciente(Paciente p){

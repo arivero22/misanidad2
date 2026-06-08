@@ -131,6 +131,7 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         TablaPacientes = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -184,6 +185,9 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
 
         jLabel3.setText("Citas");
 
+        jButton1.setText("Borrar cita");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -200,6 +204,8 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnEditar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnVer))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -229,7 +235,8 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
-                    .addComponent(btnVer))
+                    .addComponent(btnVer)
+                    .addComponent(jButton1))
                 .addGap(9, 9, 9))
         );
 
@@ -264,6 +271,17 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
         cargarTablaCitas(sistema);
     }//GEN-LAST:event_TablaPacientesMousePressed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Cita c = getCitaSeleccionada();
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar esta cita?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            c.getPaciente().agregarNotificacion(new Notificacion("Su cita "+c.getMotivo()+" ha sido eliminada por un administrador."));
+            sistema.eliminarCita(c);
+            cargarTablaCitas(sistema);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -296,6 +314,7 @@ public class VistaAdminCentroSalud extends javax.swing.JFrame {
     private javax.swing.JButton btnCerrarSesion;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnVer;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

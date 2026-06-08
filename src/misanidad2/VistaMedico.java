@@ -228,8 +228,8 @@ public class VistaMedico extends javax.swing.JFrame {
             Object[] fila = {
                 c.getPaciente().getNombre(),
                 c.getMotivo(),
-                c.getFechaHora().toLocalDate(),
-                c.getFechaHora().toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm")),
+                c.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                c.getFechaHora().format(DateTimeFormatter.ofPattern("HH:mm")),
                 c.getCentro(),
                 c.getEstado().getNombre(),
                 c.isTelefonica() ? "Telefónica" : "Presencial"
@@ -260,8 +260,11 @@ public class VistaMedico extends javax.swing.JFrame {
         
         if(reagendadas > 0){
             cargarTablaCitas(medico);
-            
-            
+            GestorArchivos.guardarSistema(sistema);
+            for(Cita c : citas_dia){
+                c.getPaciente().agregarNotificacion(new Notificacion("Su cita del dia "+fecha_str+" con "+medico+" ha sido reagendada."));
+            }
+            JOptionPane.showMessageDialog(this, "Las citas han sido reagendadas correctamente al siguiente dia disponible.", "Citas reagendadas", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     
@@ -679,11 +682,13 @@ public class VistaMedico extends javax.swing.JFrame {
         }
 
         paciente.agregarMedicamento(nuevo);
+        paciente.agregarNotificacion(new Notificacion("Se te ha recetado "+nuevo.getNombre()+"."));
         cargarTablaMedicamentos(paciente);
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        Medicamento medicamento = obtenerMedicamentoSeleccionado(); //CAMBIAR FUNCION
+        Medicamento medicamento = obtenerMedicamentoSeleccionado();
         Paciente paciente = (Paciente) SeleccionPaciente.getSelectedItem();
         int confirm = JOptionPane.showConfirmDialog(this, "¿Eliminar receta para "+medicamento.getNombre()+ " del paciente "+paciente.getNombre()+"?", "Confirmar", JOptionPane.YES_NO_OPTION);
 
@@ -691,6 +696,8 @@ public class VistaMedico extends javax.swing.JFrame {
             paciente.borrarMedicamento(medicamento);
             cargarTablaMedicamentos(paciente);
         }
+        
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void SeleccionPacienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SeleccionPacienteActionPerformed
@@ -721,6 +728,7 @@ public class VistaMedico extends javax.swing.JFrame {
                 cargarTablaConsultas((Paciente) SeleccionPaciente.getSelectedItem());
             }
         }
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_BotonPrescripcionActionPerformed
 
     private void BotonReagendarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonReagendarActionPerformed
@@ -775,6 +783,7 @@ public class VistaMedico extends javax.swing.JFrame {
 
         paciente.agregarVacuna(nuevo);
         cargarTablaVacunas(paciente);
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private PruebaLaboratorio getPruebaSeleccionada(){
@@ -837,6 +846,8 @@ public class VistaMedico extends javax.swing.JFrame {
             paciente.agregarPrueba(nuevo);
             cargarTablaPruebas(paciente);
         }
+        
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -888,6 +899,7 @@ public class VistaMedico extends javax.swing.JFrame {
 
         paciente.agregarPrueba(nueva);
         cargarTablaPruebas(paciente);
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

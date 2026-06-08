@@ -23,6 +23,7 @@ public class Cita implements Serializable {
     private String motivo_cancelacion;
     private LocalDateTime fecha_cancelacion;
     private LocalDateTime fecha_solicitud;
+    private boolean notificada;
     
     public Cita(Paciente paciente, Medico medico, LocalDateTime fecha_hora, String motivo, String centro){
         id++;
@@ -34,6 +35,7 @@ public class Cita implements Serializable {
         this.estado = EstadoCita.CONFIRMADA;
         this.telefonica = false;
         this.fecha_solicitud = LocalDateTime.now();
+        this.notificada = false;
     }
     
     public int getId(){ return id; }
@@ -48,6 +50,7 @@ public class Cita implements Serializable {
     public String getMotivoCancelacion(){ return motivo_cancelacion; }
     public LocalDateTime getFechaCancelacion(){ return fecha_cancelacion; }
     public LocalDateTime getFechaSolicitud(){ return fecha_solicitud; }
+    public boolean getNotificada(){ return notificada; }
     
     public void setEstado(EstadoCita estado){ this.estado = estado; }
     public void setMotivoCancelacion(String motivo){ motivo_cancelacion = motivo; }
@@ -55,6 +58,7 @@ public class Cita implements Serializable {
     public void setTelefonica(boolean telefonica){ this.telefonica = telefonica; }
     public void setPaciente(Paciente p){ paciente= p; }
     public void setMedico(Medico m){ medico = m; }
+    public void setNotificada(boolean n){ notificada = n; }
 
     public void setFecha_hora(LocalDateTime fecha_hora) {
         this.fecha_hora = fecha_hora;

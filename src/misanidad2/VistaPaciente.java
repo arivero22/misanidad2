@@ -66,7 +66,7 @@ public class VistaPaciente extends javax.swing.JFrame {
     LocalDateTime ahora = LocalDateTime.now();
     LocalDateTime dentroDeDosDias = ahora.plusDays(2);
 
-    for (Cita c : sistema.getCitasParaPaciente(paciente)) {
+    /*for (Cita c : sistema.getCitasParaPaciente(paciente)) {
 
         boolean estaDentroDeDosDias =
                 c.getFechaHora().isAfter(ahora)
@@ -82,7 +82,7 @@ public class VistaPaciente extends javax.swing.JFrame {
                     + c.getCentro()
             );
         }
-    }
+    }*/
 
     jList1.setModel(modelo);
     jScrollPane8.setViewportView(jList1);
@@ -169,6 +169,7 @@ public class VistaPaciente extends javax.swing.JFrame {
 
         sistema.registrarCita(cita);
         cargarTablaCitas(paciente);
+        GestorArchivos.guardarSistema(sistema);
 
         String tipoCita = cita.isTelefonica() ? "Telefónica" : "Presencial";
         JOptionPane.showMessageDialog(this, "Especialidad: "+especialidad.getNombre()+"\n"+"Médico: "+medico_elegido.getNombre()+"\n"+"Centro: "+centro + "\n"+"Fecha: "+fecha_hora_elegida.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))+"\n"+"Tipo: "+tipoCita+"\n"+"Motivo: "+motivo,"Cita solicitada correctamente", JOptionPane.INFORMATION_MESSAGE);
@@ -442,6 +443,7 @@ public class VistaPaciente extends javax.swing.JFrame {
         cargarTablaCitas(paciente);
 
         JOptionPane.showMessageDialog(this, "Cita reagendada:\n" + "Original: " + cita.getFechaHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" + "Nueva:" + nuevaFechaHora.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" + "Médico: " + medico.getNombre() + "\n" + "Centro: " + cita.getCentro() + "\n" + "Motivo: " + motivoReagendamiento,"Cita Reagendada",JOptionPane.INFORMATION_MESSAGE);
+        GestorArchivos.guardarSistema(sistema);
     }
     
     @SuppressWarnings("unchecked")
@@ -858,6 +860,8 @@ public class VistaPaciente extends javax.swing.JFrame {
             paciente.setTelefono(nuevoTelefono.trim());
             LabelTelefono.setText("Teléfono: " + nuevoTelefono.trim());
         }
+        
+        GestorArchivos.guardarSistema(sistema);
     }//GEN-LAST:event_BotonCambiarTelefonoActionPerformed
 
     private void BotonCancelarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonCancelarCitaActionPerformed

@@ -59,4 +59,6 @@ public class Paciente extends Usuario {
     public void agregarConsulta(Consulta consulta){ historial_clinico.add(consulta); }
     
     public void agregarPrueba(PruebaLaboratorio prueba){ pruebas.add(prueba); }
+    
+    public void agregarNotificacion(Notificacion noti){ notificaciones.add(noti); }
 }

@@ -5,6 +5,7 @@
 package misanidad2;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -233,6 +234,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Error al crear p. administracion: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+        GestorArchivos.guardarSistema(sistema);
     }
     
     private Cita getCitaSeleccionada(){
@@ -258,6 +260,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jDialog1 = new javax.swing.JDialog();
+        jPopupMenu1 = new javax.swing.JPopupMenu();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -278,6 +281,8 @@ public class VistaAdministrador extends javax.swing.JFrame {
         BotonEditarCita = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
 
         jLabel1.setText("jLabel1");
 
@@ -438,6 +443,11 @@ public class VistaAdministrador extends javax.swing.JFrame {
         jScrollPane3.setViewportView(TablaCitas);
 
         BotonBorrarCita.setText("Borrar");
+        BotonBorrarCita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonBorrarCitaActionPerformed(evt);
+            }
+        });
 
         BotonEditarCita.setText("Editar");
         BotonEditarCita.addActionListener(new java.awt.event.ActionListener() {
@@ -487,6 +497,27 @@ public class VistaAdministrador extends javax.swing.JFrame {
             }
         });
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Exportar citas por medico a .csv");
+        jMenu2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu2MouseClicked(evt);
+            }
+        });
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Exportar lista de medicos con mas citas a .csv");
+        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenu3MouseClicked(evt);
+            }
+        });
+        jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
 
@@ -540,6 +571,7 @@ public class VistaAdministrador extends javax.swing.JFrame {
         if (confirmacion == JOptionPane.YES_OPTION) {
             sistema.eliminarUsuario(usr);
             cargarTablaPacientes(sistema);
+            GestorArchivos.guardarSistema(sistema);
         }
     }//GEN-LAST:event_BotonBorrarPacienteActionPerformed
 
@@ -615,6 +647,40 @@ public class VistaAdministrador extends javax.swing.JFrame {
         
     }//GEN-LAST:event_BotonEditarCitaActionPerformed
 
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
+    private void jMenu2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu2MouseClicked
+        // TODO add your handling code here:
+        List<Medico> medicos = sistema.getTodosMedicos();
+        
+        Medico medico = (Medico) JOptionPane.showInputDialog(this, "Seleccione el medico:","Exportar .csv", JOptionPane.QUESTION_MESSAGE, null, medicos.toArray(), medicos);
+
+        
+        GestorArchivos.exportarCitasPendientesMedicoCSV(sistema, medico);
+        JOptionPane.showMessageDialog(this, "Datos exportados a .csv");
+    }//GEN-LAST:event_jMenu2MouseClicked
+
+    private void BotonBorrarCitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonBorrarCitaActionPerformed
+        // TODO add your handling code here:
+        Cita c = getCitaSeleccionada();
+        int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de que desea eliminar esta cita?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            c.getPaciente().agregarNotificacion(new Notificacion("Su cita "+c.getMotivo()+" ha sido eliminada por un administrador."));
+            sistema.eliminarCita(c);
+            cargarTablaCitas(sistema);
+        }
+    }//GEN-LAST:event_BotonBorrarCitaActionPerformed
+
+    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+        // TODO add your handling code here:
+        GestorArchivos.exportarMedicosConMasCitasCSV(sistema);
+        JOptionPane.showMessageDialog(this, "Datos exportados a .csv");
+    }//GEN-LAST:event_jMenu3MouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BotonBorrarCita;
     private javax.swing.JButton BotonBorrarEmpleado;
@@ -630,10 +696,13 @@ public class VistaAdministrador extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;

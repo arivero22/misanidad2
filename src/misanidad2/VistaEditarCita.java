@@ -256,10 +256,11 @@ public class VistaEditarCita extends javax.swing.JFrame {
                 cita.setFechaCancelacion(LocalDateTime.now());
             }
             
-            
-            GestorArchivos.guardarSistema(sistema);
+            cita.getPaciente().agregarNotificacion(new Notificacion("Un administrador ha hecho una modificación en su cita ("+cita.getMotivo()+")."));
             
             JOptionPane.showMessageDialog(this, "Datos guardados.");
+            GestorArchivos.guardarSistema(sistema);
+            
             this.dispose();
             if(ventana_anterior_admin != null){
                 ventana_anterior_admin.cargarTablaCitas(sistema);
